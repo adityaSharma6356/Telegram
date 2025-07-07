@@ -9,6 +9,7 @@
 package org.telegram.ui.ActionBar;
 
 import static org.telegram.messenger.AndroidUtilities.dp;
+import static org.telegram.messenger.AndroidUtilities.dpf2;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -198,6 +199,17 @@ public class SimpleTextView extends View implements Drawable.Callback {
 
     public void setTextSize(int sizeInDp) {
         int newSize = dp(sizeInDp);
+        if (newSize == textPaint.getTextSize()) {
+            return;
+        }
+        textPaint.setTextSize(newSize);
+        if (!recreateLayoutMaybe()) {
+            invalidate();
+        }
+    }
+
+    public void setTextSize(float sizeInDp) {
+        float newSize = dpf2(sizeInDp);
         if (newSize == textPaint.getTextSize()) {
             return;
         }
