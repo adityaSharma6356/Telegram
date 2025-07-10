@@ -33,7 +33,6 @@ import com.google.zxing.common.detector.MathUtils;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
-import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -488,7 +487,6 @@ public class ProfileStoriesView extends View implements NotificationCenter.Notif
     protected void dispatchDraw(Canvas canvas) {
         rightAnimated.set(this.right);
         float avatarPullProgress = Utilities.clamp((avatarContainer.getScaleX() - 1f) / 0.35f, 1f, 0f);
-        Log.d("testlog", "story "+avatarPullProgress);
         float insetMain = AndroidUtilities.lerp(AndroidUtilities.dpf2(4f), AndroidUtilities.dpf2(3.5f), avatarPullProgress);
         insetMain *= progressToInsets;
         float ax = avatarContainer.getX() + (1 - avatarContainer.getScaleX()) * avatarContainer.getWidth() / 2f + insetMain * avatarContainer.getScaleX();
