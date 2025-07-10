@@ -2,9 +2,15 @@ package org.telegram.ui.Stars;
 
 import static org.telegram.messenger.AndroidUtilities.dp;
 import static org.telegram.messenger.AndroidUtilities.dpf2;
+import static org.telegram.messenger.AndroidUtilities.normalizeY;
+import static org.telegram.messenger.AndroidUtilities.pxToDp;
 
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
+import android.view.View;
+
+import androidx.annotation.NonNull;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
@@ -208,5 +214,149 @@ public class StarGiftPatterns {
             pattern.draw(canvas);
         }
     }
+
+    public static void drawProfilePattern(Canvas canvas, Drawable pattern, float w, float h, float alpha, float full, @NonNull View avatarContainer) {
+        if (alpha <= 0.0f) return;
+
+        final float l = 0;
+
+        final float ax = avatarContainer.getX();
+        final float ay = avatarContainer.getY();
+        final float aw = avatarContainer.getWidth();
+        final float ah = avatarContainer.getHeight();
+
+        final float acx = ax + aw / 2.0f;
+        final float acy = ay + ah / 2.0f;
+
+
+//        for (int i = 0 ; i < (full > 0 ? 18 : 13) ; i ++) {
+        for (int i = 0 ; i < 18 ; i ++) {
+            float x;
+            float y;
+            float size;
+            float thisAlpha;
+
+            if(i == 0){
+                float progress = normalizeY(ay, dpf2(10),  dpf2(46));
+                x = acx + progress * ((aw / 2) + dpf2(55));
+                y = AndroidUtilities.lerp(acy, Math.max(dpf2(100), acy) + ah / 2 + dpf2(25), progress);
+                thisAlpha = 0.2f;
+                size = dp(18);
+            } else if(i == 1){
+                float progress = normalizeY(ay, dpf2(20),  dpf2(46));
+                x = acx;
+                y = AndroidUtilities.lerp(acy, Math.max(dpf2(100), acy) + ah / 2 + dpf2(25), progress);
+                thisAlpha = 0.2f * progress;
+                size = dp(20);
+            } else if(i == 2){
+                float progress = normalizeY(ay, dpf2(20),  dpf2(46));
+                x = acx - progress * ((aw / 2) + dpf2(20));
+                y = AndroidUtilities.lerp(acy, Math.max(dpf2(100), acy) + ah / 2, progress);
+                thisAlpha = 0.35f * progress;
+                size = dp(20);
+            } else if(i == 3){
+                float progress = normalizeY(ay, dpf2(20),  dpf2(46));
+                x = acx + progress * ((aw / 2) + dpf2(20));
+                y = AndroidUtilities.lerp(acy, Math.max(dpf2(100), acy) + ah / 2, progress);
+                thisAlpha = 0.35f * progress;
+                size = dp(20);
+            } else if(i == 4){
+                float progress = normalizeY(ay, dpf2(20),  dpf2(46));
+                x = acx - progress * ((aw / 2) + dpf2(13));
+                y = AndroidUtilities.lerp(acy, Math.max(dpf2(100), acy) - ah / 4, progress);
+                thisAlpha = 0.3f * progress;
+                size = dp(20);
+            } else if(i == 5){
+                float progress = normalizeY(ay, dpf2(20),  dpf2(46));
+                x = acx + progress * ((aw / 2) + dpf2(13));
+                y = AndroidUtilities.lerp(acy, Math.max(dpf2(100), acy) - ah / 4, progress);
+                thisAlpha = 0.3f * progress;
+                size = dp(20);
+            } else if(i == 6){
+                float progress = normalizeY(ay, dpf2(-15),  dpf2(38));
+                x = acx + progress * aw / 2;
+                y = AndroidUtilities.lerp(acy, Math.max(dpf2(100), acy) - ah / 2 - dpf2(30), progress);
+                thisAlpha = 0.2f;
+                size = dp(18);
+            } else if(i == 7){
+                float progress = normalizeY(ay, dpf2(-10),  dpf2(38));
+                x = acx - progress * aw / 2;
+                y = AndroidUtilities.lerp(acy, Math.max(dpf2(100), acy) - ah / 2 - dpf2(30), progress);
+                thisAlpha = 0.2f;
+                size = dp(18);
+            } else if(i == 8){
+                float progress = normalizeY(ay, dpf2(-20),  dpf2(44));
+                x = acx - progress * aw / 2;
+                y = AndroidUtilities.lerp(acy, Math.max(dpf2(100), acy)  + ah / 2 + dpf2(40), progress);
+                thisAlpha = 0.2f;
+                size = dp(20);
+            } else if(i == 9){
+                float progress = normalizeY(ay, dpf2(-30),  dpf2(44));
+                x = acx + progress * aw / 2;
+                y = AndroidUtilities.lerp(acy, Math.max(dpf2(100), acy)  + ah / 2 + dpf2(40), progress);
+                thisAlpha = 0.2f;
+                size = dp(20);
+            } else if(i == 10){
+                float progress = normalizeY(ay, dpf2(6),  dpf2(38));
+                x = acx - progress * ((aw / 2) + dpf2(40));
+                y = AndroidUtilities.lerp(acy, Math.max(dpf2(100), acy) + dpf2(10), progress);
+                thisAlpha = 0.3f * progress;
+                size = dp(20);
+            } else if(i == 11){
+                float progress = normalizeY(ay, dpf2(12),  dpf2(38));
+                x = acx + progress * ((aw / 2) + dpf2(40));
+                y = AndroidUtilities.lerp(acy, Math.max(dpf2(100), acy) + dpf2(10), progress);
+                thisAlpha = 0.3f * progress;
+                size = dp(20);
+            } else if(i == 12){
+                float progress = normalizeY(ay, dpf2(15),  dpf2(46));
+                x = acx - progress * ((aw / 2) + dpf2(55));
+                y = AndroidUtilities.lerp(acy, Math.max(dpf2(100), acy) + ah / 2 + dpf2(25), progress);
+                thisAlpha = 0.2f;
+                size = dp(18);
+            } else if(i == 13){
+                float progress = normalizeY(ay, dpf2(20),  dpf2(46));
+                x = acx;
+                y = AndroidUtilities.lerp(acy, Math.max(dpf2(100), acy) - ah / 2 - dpf2(20), progress);
+                thisAlpha = 0.3f * progress;
+                size = dp(20);
+            } else if(i == 14){
+                float progress = normalizeY(ay, dpf2(-10),  dpf2(38));
+                x = acx - progress * ((aw / 2) + dpf2(100));
+                y = AndroidUtilities.lerp(acy, Math.max(dpf2(100), acy) + dpf2(11), progress);
+                thisAlpha = 0.2f;
+                size = dp(18);
+            } else if(i == 15){
+                float progress = normalizeY(ay, dpf2(-5),  dpf2(38));
+                x = acx + progress * ((aw / 2) + dpf2(100));
+                y = AndroidUtilities.lerp(acy, Math.max(dpf2(100), acy) + dpf2(11), progress);
+                thisAlpha = 0.2f;
+                size = dp(18);
+            } else if(i == 16){
+                float progress = normalizeY(ay, dpf2(8),  dpf2(46));
+                x = acx - progress * ((aw / 2) + dpf2(50));
+                y = AndroidUtilities.lerp(acy, Math.max(dpf2(100), acy) - ah / 2 , progress);
+                thisAlpha = 0.25f;
+                size = dp(18);
+            } else {
+                float progress = normalizeY(ay, dpf2(8),  dpf2(46));
+                x = acx + progress * ((aw / 2) + dpf2(50));
+                y = AndroidUtilities.lerp(acy, Math.max(dpf2(100), acy) - ah / 2 , progress);
+                thisAlpha = 0.25f;
+                size = dp(18);
+            }
+
+            pattern.setBounds(
+                (int) (x - size / 2.0f),
+                (int) (y - size / 2.0f),
+                (int) (x + size / 2.0f),
+                (int) (y + size / 2.0f)
+            );
+            pattern.setAlpha((int) (0xFF * alpha * thisAlpha));
+            pattern.draw(canvas);
+        }
+    }
+
+
 
 }

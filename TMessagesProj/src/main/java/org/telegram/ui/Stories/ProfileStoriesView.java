@@ -19,6 +19,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -485,12 +486,13 @@ public class ProfileStoriesView extends View implements NotificationCenter.Notif
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
-        float rright = rightAnimated.set(this.right);
-        float avatarPullProgress = Utilities.clamp((avatarContainer.getScaleX() - 1f) / 0.4f, 1f, 0f);
+        rightAnimated.set(this.right);
+        float avatarPullProgress = Utilities.clamp((avatarContainer.getScaleX() - 1f) / 0.35f, 1f, 0f);
+        Log.d("testlog", "story "+avatarPullProgress);
         float insetMain = AndroidUtilities.lerp(AndroidUtilities.dpf2(4f), AndroidUtilities.dpf2(3.5f), avatarPullProgress);
         insetMain *= progressToInsets;
-        float ax = avatarContainer.getX() + insetMain * avatarContainer.getScaleX();
-        float ay = avatarContainer.getY() + insetMain * avatarContainer.getScaleY();
+        float ax = avatarContainer.getX() + (1 - avatarContainer.getScaleX()) * avatarContainer.getWidth() / 2f + insetMain * avatarContainer.getScaleX();
+        float ay = avatarContainer.getY() + (1 - avatarContainer.getScaleY()) * avatarContainer.getHeight() / 2f + insetMain * avatarContainer.getScaleY();
         float aw = (avatarContainer.getWidth() - insetMain * 2) * avatarContainer.getScaleX();
         float ah = (avatarContainer.getHeight() - insetMain * 2) * avatarContainer.getScaleY();
         rect1.set(ax, ay, ax + aw, ay + ah);

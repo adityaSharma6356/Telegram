@@ -1,7 +1,11 @@
 package org.telegram.ui.Stars;
 
 import static org.telegram.messenger.AndroidUtilities.dp;
+import static org.telegram.messenger.AndroidUtilities.dpf2;
+import static org.telegram.messenger.AndroidUtilities.dpr;
 import static org.telegram.messenger.AndroidUtilities.lerp;
+import static org.telegram.messenger.AndroidUtilities.normalizeY;
+import static org.telegram.messenger.AndroidUtilities.pxToDp;
 import static org.telegram.ui.Stars.StarsController.findAttribute;
 
 import android.content.Context;
@@ -11,6 +15,7 @@ import android.graphics.Paint;
 import android.graphics.RadialGradient;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -326,19 +331,14 @@ public class ProfileGiftsView extends View implements NotificationCenter.Notific
 
         final float ax = avatarContainer.getX();
         final float ay = avatarContainer.getY();
-        final float aw = (avatarContainer.getWidth()) * avatarContainer.getScaleX();
-        final float ah = (avatarContainer.getHeight()) * avatarContainer.getScaleY();
+        final float aw = (avatarContainer.getWidth());
+        final float ah = (avatarContainer.getHeight());
 
         canvas.save();
         canvas.clipRect(0, 0, getWidth(), expandY);
 
         final float acx = ax + aw / 2.0f;
-        final float cacx = Math.min(acx, dp(48));
         final float acy = ay + ah / 2.0f;
-        final float ar = Math.min(aw, ah) / 2.0f + dp(6);
-        final float cx = getWidth() / 2.0f;
-
-        final float closedAlpha = Utilities.clamp01((float) (expandY - (AndroidUtilities.statusBarHeight + ActionBar.getCurrentActionBarHeight())) / dp(50));
 
         for (int i = 0; i < gifts.size(); ++i) {
             final Gift gift = gifts.get(i);
@@ -346,78 +346,61 @@ public class ProfileGiftsView extends View implements NotificationCenter.Notific
             final float scale = lerp(0.5f, 1.0f, alpha);
             final int index = i; // gifts.size() == maxCount ? i - 1 : i;
             if (index == 0) {
+                float progress = normalizeY(ay, dpf2(20),  dpf2(50));
                 gift.draw(
                     canvas,
-                    (float) (acx + ar * Math.cos(-65 / 180.0f * Math.PI)),
-                    (float) (acy + ar * Math.sin(-65 / 180.0f * Math.PI)),
-                    scale, -65 + 90,
-                    alpha * (1.0f - expandProgress), lerp(0.9f, 0.25f, actionBarProgress)
+                    acx + progress * dp(80),
+                    acy + progress * dp(30),
+                    scale, 0f,
+                    alpha, lerp(0.9f, 0.25f, actionBarProgress)
                 );
             } else if (index == 1) {
+                float progress = normalizeY(ay, dpf2(15),  dpf2(45));
                 gift.draw(
-                    canvas,
-                    lerp(cacx + Math.min(getWidth() * .27f, dp(62)), cx, 0.5f * actionBarProgress), acy - dp(52),
-                    scale, -4.0f,
-                    alpha * alpha * (1.0f - expandProgress) * (1.0f - actionBarProgress) * (closedAlpha),
-                    1.0f
+                        canvas,
+                        acx - progress * dp(70),
+                        AndroidUtilities.lerp(acy, Math.max(dpf2(100), acy) - dp(50), progress),
+                        scale, 0f,
+                        alpha, lerp(0.9f, 0.25f, actionBarProgress)
                 );
             } else if (index == 2) {
+                float progress = normalizeY(ay, dpf2(0),  dpf2(35));
                 gift.draw(
-                    canvas,
-                    lerp(cacx + Math.min(getWidth() * .46f, dp(105)), cx, 0.5f * actionBarProgress), acy - dp(72),
-                    scale, 8.0f,
-                    alpha * (1.0f - expandProgress) * (1.0f - actionBarProgress) * (closedAlpha),
-                    1.0f
+                        canvas,
+                        acx - progress * dp(80),
+                        AndroidUtilities.lerp(acy, Math.max(dpf2(100), acy) + dp(30), progress),
+                        scale, 0f,
+                        alpha, lerp(0.9f, 0.25f, actionBarProgress)
                 );
             } else if (index == 3) {
+                float progress = normalizeY(ay, dpf2(0),  dpf2(35));
                 gift.draw(
-                    canvas,
-                    lerp(cacx + Math.min(getWidth() * .60f, dp(136)), cx, 0.5f * actionBarProgress), acy - dp(46),
-                    scale, 3.0f,
-                    alpha * (1.0f - expandProgress) * (1.0f - actionBarProgress) * (closedAlpha),
-                    1.0f
+                        canvas,
+                        acx + progress * dp(90),
+                        AndroidUtilities.lerp(acy, Math.max(dpf2(100), acy) - dp(45), progress),
+                        scale, 0f,
+                        alpha, lerp(0.9f, 0.25f, actionBarProgress)
                 );
             } else if (index == 4) {
+                float progress = normalizeY(ay, dpf2(-20),  dpf2(28));
                 gift.draw(
-                    canvas,
-                    lerp(cacx + Math.min(getWidth() * .08f, dp(21.6f)), cx, 0.5f * actionBarProgress), acy - dp(82f),
-                    scale, -3.0f,
-                    alpha * (1.0f - expandProgress) * (1.0f - actionBarProgress) * (closedAlpha),
-                    1.0f
+                        canvas,
+                        acx - progress * dp(110),
+                        AndroidUtilities.lerp(acy, Math.max(dpf2(100), acy) - dp(10), progress),
+                        scale, 0f,
+                        alpha, lerp(0.9f, 0.25f, actionBarProgress)
                 );
             } else if (index == 5) {
+                float progress = normalizeY(ay, dpf2(-32),  dpf2(26));
                 gift.draw(
-                    canvas,
-                    lerp(cacx + Math.min(getWidth() * .745f, dp(186)), cx, 0.5f * actionBarProgress), acy - dp(39),
-                    scale, 2.0f,
-                    alpha * (1.0f - expandProgress) * (1.0f - actionBarProgress) * (closedAlpha),
-                    1.0f
-                );
-            } else if (index == 6) {
-                gift.draw(
-                    canvas,
-                    cacx + Math.min(getWidth() * .38f, dp(102)), expandY - dp(12),
-                    scale, 0,
-                    alpha * (1.0f - expandProgress) * (1.0f - actionBarProgress) * (closedAlpha),
-                    1.0f
-                );
-            } else if (index == 7) {
-                gift.draw(
-                    canvas,
-                    cacx + Math.min(getWidth() * .135f, dp(36)), expandY - dp(17.6f),
-                    scale, -5.0f,
-                    alpha * (1.0f - expandProgress) * (1.0f - actionBarProgress) * (closedAlpha),
-                    1.0f
-                );
-            } else if (index == 8) {
-                gift.draw(
-                    canvas,
-                    cacx + Math.min(getWidth() * .76f, dp(178)), expandY - dp(21.66f),
-                    scale, 5.0f,
-                    alpha * (1.0f - expandProgress) * (1.0f - actionBarProgress) * (closedAlpha),
-                    1.0f
+                        canvas,
+                        acx + progress * dp(120),
+                        AndroidUtilities.lerp(acy, Math.max(dpf2(100), acy) - dp(10), progress),
+                        scale, 0f,
+                        alpha, lerp(0.9f, 0.25f, actionBarProgress)
                 );
             }
+
         }
 
         canvas.restore();

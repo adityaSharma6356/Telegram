@@ -213,6 +213,20 @@ public class SimpleTextView extends View implements Drawable.Callback {
         if (newSize == textPaint.getTextSize()) {
             return;
         }
+//        int clamped = (int) Math.ceil(sizeInDp);
+//        if((clamped - newSize) < 0.1){
+//            textPaint.setTextSize(clamped);
+//            setScaleX(1f);
+//            setScaleY(1f);
+//        } else {
+//            if(newSize < textPaint.getTextSize()){
+//                setScaleX(1f - clamped - newSize);
+//                setScaleY(1f - clamped - newSize);
+//            } else {
+//                setScaleX(1f + newSize - (float) Math.floor(newSize));
+//                setScaleY(1f + newSize - (float) Math.floor(newSize));
+//            }
+//        }
         textPaint.setTextSize(newSize);
         if (!recreateLayoutMaybe()) {
             invalidate();

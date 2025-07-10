@@ -2633,6 +2633,9 @@ public class AndroidUtilities {
         return (int) Math.floor(density * value);
     }
 
+    public static int pxToDp(float px) {
+        return Math.round(px / density);
+    }
     public static int compare(int lhs, int rhs) {
         if (lhs == rhs) {
             return 0;
@@ -5006,6 +5009,9 @@ public class AndroidUtilities {
         return (float) Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
     }
 
+    public static float normalizeY(float x, float zero, float one) {
+        return Math.min(1f, Math.max(0f, (x - zero) / (one - zero)));
+    }
     public static int lerp(int a, int b, float f) {
         return (int) (a + f * (b - a));
     }
