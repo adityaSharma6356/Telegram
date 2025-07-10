@@ -5127,7 +5127,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
             avatarBlurView.setRenderEffect(RenderEffect.createBlurEffect(dp(100), dp(20), Shader.TileMode.CLAMP));
         } else {
-            avatarBlurView.setBackgroundColor(getThemedColor(Theme.key_avatar_backgroundActionBarBlue));
+            avatarBlurView.setVisibility(View.GONE);
         }
 
         frameLayout.addView(actionBar);
@@ -5785,32 +5785,34 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
         }
 
-        SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
-        String key = NotificationsController.getSharedPrefKey(did, topicId);
-        boolean muted = false;
-        boolean hasOverride = preferences.contains("notify2_" + key);
-        int value = preferences.getInt("notify2_" + key, 0);
-        int delta = preferences.getInt("notifyuntil_" + key, 0);
-        if (value == 3 && delta != Integer.MAX_VALUE) {
-            delta -= getConnectionsManager().getCurrentTime();
-            if (delta <= 0) {
-                muted = true;
-            }
-        } else {
-            if (value == 0) {
-                if (hasOverride) {
+        if(imageUpdater==null){
+            SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
+            String key = NotificationsController.getSharedPrefKey(did, topicId);
+            boolean muted = false;
+            boolean hasOverride = preferences.contains("notify2_" + key);
+            int value = preferences.getInt("notify2_" + key, 0);
+            int delta = preferences.getInt("notifyuntil_" + key, 0);
+            if (value == 3 && delta != Integer.MAX_VALUE) {
+                delta -= getConnectionsManager().getCurrentTime();
+                if (delta <= 0) {
                     muted = true;
-                } else {
-                    muted = getNotificationsController().isGlobalNotificationsEnabled(did, false, false);
                 }
-            } else if (value == 1) {
-                muted = true;
+            } else {
+                if (value == 0) {
+                    if (hasOverride) {
+                        muted = true;
+                    } else {
+                        muted = getNotificationsController().isGlobalNotificationsEnabled(did, false, false);
+                    }
+                } else if (value == 1) {
+                    muted = true;
+                }
             }
-        }
-        if(muted){
-            buttonRowItemViews.add(new ButtonRowItemView(context, muteItem));
-        } else {
-            buttonRowItemViews.add(new ButtonRowItemView(context, unMuteItem));
+            if(muted){
+                buttonRowItemViews.add(new ButtonRowItemView(context, muteItem));
+            } else {
+                buttonRowItemViews.add(new ButtonRowItemView(context, unMuteItem));
+            }
         }
 
 
@@ -7437,12 +7439,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         ArrayList<Animator> animators = new ArrayList<>();
 
-//        animators.add(ObjectAnimator.ofFloat(callItem, View.ALPHA, visible ? 0.0f : 1.0f));
-//        animators.add(ObjectAnimator.ofFloat(videoCallItem, View.ALPHA, visible ? 0.0f : 1.0f));
         animators.add(ObjectAnimator.ofFloat(otherItem, View.ALPHA, visible ? 0.0f : 1.0f));
         animators.add(ObjectAnimator.ofFloat(editItem, View.ALPHA, visible ? 0.0f : 1.0f));
-//        animators.add(ObjectAnimator.ofFloat(callItem, View.TRANSLATION_Y, visible ? -AndroidUtilities.dp(10) : 0.0f));
-//        animators.add(ObjectAnimator.ofFloat(videoCallItem, View.TRANSLATION_Y, visible ? -AndroidUtilities.dp(10) : 0.0f));
         animators.add(ObjectAnimator.ofFloat(otherItem, View.TRANSLATION_Y, visible ? -AndroidUtilities.dp(10) : 0.0f));
         animators.add(ObjectAnimator.ofFloat(editItem, View.TRANSLATION_Y, visible ? -AndroidUtilities.dp(10) : 0.0f));
         animators.add(ObjectAnimator.ofFloat(mediaSearchItem, View.ALPHA, visible ? 1.0f : 0.0f));
@@ -7470,12 +7468,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             public void onAnimationEnd(Animator animation) {
                 if (headerAnimatorSet != null) {
                     if (mediaHeaderVisible) {
-//                        if (callItemVisible) {
-//                            callItem.setVisibility(View.GONE);
-//                        }
-//                        if (videoCallItemVisible) {
-//                            videoCallItem.setVisibility(View.GONE);
-//                        }
                         if (editItemVisible) {
                             editItem.setVisibility(View.GONE);
                         }
@@ -7719,65 +7711,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             listView.setTopGlowOffset((int) extraHeight);
 
             listView.setOverScrollMode(extraHeight > AndroidUtilities.dp(max_extra_height_dp) && extraHeight < listView.getMeasuredWidth() - newTop ? View.OVER_SCROLL_NEVER : View.OVER_SCROLL_ALWAYS);
-
-//            if (writeButton != null) {
-//                writeButton.setTranslationY((actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + ActionBar.getCurrentActionBarHeight() + extraHeight + searchTransitionOffset - AndroidUtilities.dp(29.5f));
-//
-//                boolean writeButtonVisible = diff > 0.2f && !searchMode && (imageUpdater == null || setAvatarRow == -1);
-//                if (writeButtonVisible && chatId != 0) {
-//                    writeButtonVisible = ChatObject.isChannel(currentChat) && !currentChat.megagroup && chatInfo != null && chatInfo.linked_chat_id != 0 && infoHeaderRow != -1;
-//                }
-//                if (!openAnimationInProgress) {
-//                    boolean currentVisible = writeButton.getTag() == null;
-//                    if (writeButtonVisible != currentVisible) {
-//                        if (writeButtonVisible) {
-//                            writeButton.setTag(null);
-//                        } else {
-//                            writeButton.setTag(0);
-//                        }
-//                        if (writeButtonAnimation != null) {
-//                            AnimatorSet old = writeButtonAnimation;
-//                            writeButtonAnimation = null;
-//                            old.cancel();
-//                        }
-//                        if (animated) {
-//                            writeButtonAnimation = new AnimatorSet();
-//                            if (writeButtonVisible) {
-//                                writeButtonAnimation.setInterpolator(new DecelerateInterpolator());
-//                                writeButtonAnimation.playTogether(
-//                                        ObjectAnimator.ofFloat(writeButton, View.SCALE_X, 1.0f),
-//                                        ObjectAnimator.ofFloat(writeButton, View.SCALE_Y, 1.0f),
-//                                        ObjectAnimator.ofFloat(writeButton, View.ALPHA, 1.0f)
-//                                );
-//                            } else {
-//                                writeButtonAnimation.setInterpolator(new AccelerateInterpolator());
-//                                writeButtonAnimation.playTogether(
-//                                        ObjectAnimator.ofFloat(writeButton, View.SCALE_X, 0.2f),
-//                                        ObjectAnimator.ofFloat(writeButton, View.SCALE_Y, 0.2f),
-//                                        ObjectAnimator.ofFloat(writeButton, View.ALPHA, 0.0f)
-//                                );
-//                            }
-//                            writeButtonAnimation.setDuration(150);
-//                            writeButtonAnimation.addListener(new AnimatorListenerAdapter() {
-//                                @Override
-//                                public void onAnimationEnd(Animator animation) {
-//                                    if (writeButtonAnimation != null && writeButtonAnimation.equals(animation)) {
-//                                        writeButtonAnimation = null;
-//                                    }
-//                                }
-//                            });
-//                            writeButtonAnimation.start();
-//                        } else {
-//                            writeButton.setScaleX(writeButtonVisible ? 1.0f : 0.2f);
-//                            writeButton.setScaleY(writeButtonVisible ? 1.0f : 0.2f);
-//                            writeButton.setAlpha(writeButtonVisible ? 1.0f : 0.0f);
-//                        }
-//                    }
-//
-//
-//                }
-//
-//            }
 
             if (qrItem != null) {
                 updateQrItemVisibility(animated);
